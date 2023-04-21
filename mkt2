@@ -1,0 +1,29 @@
+TARGET := test2
+SRC := $(TARGET).c
+OBJ := $(TARGET).o
+DSRC := display.c
+DLB := libdlink.so
+
+CFLAGS := -g -Wall
+LFLAGS := -lm -pthread
+DFLAGS := -shared $(DSRC) -fPIC -o $(DLB)
+XFLAGS := -o $(TARGET) $(SRC) -L. -ldlink
+CC := gcc $(CFLAGS) $(LFLAGS)
+DCC := gcc $(DFLAGS)
+XCC := gcc $(XFLAGS)
+
+all : $(TARGET)
+
+$(TARGET): $(OBJ)
+	$(DCC)
+	$(XCC)
+	ldd $(TARGET)
+.so:
+	$(CC) -o $@ $^ $(LFLAGS)
+.c.o: 
+	$(CC) -c $^
+
+clean:
+	rm -f $(TARGET) $(OBJ) $(DLB)
+
+
